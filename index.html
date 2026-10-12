@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vesper Voice Shootout — Gemini TTS</title>
+<title>Vesper Voice Shootout — Gemini TTS + Kokoro</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; background: #0a0a0f; color: #e0e0e0; padding: 20px; max-width: 1200px; margin: 0 auto; }
@@ -27,6 +27,7 @@ h1 { font-size: 28px; color: #fff; margin-bottom: 4px; }
 .voice-name { font-size: 18px; font-weight: 600; color: #fff; }
 .model-badge { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: #6366f1; color: #fff; }
 .model-badge.m25 { background: #059669; }
+.model-badge.kokoro { background: #b45309; }
 .meta { font-size: 12px; color: #666; margin-bottom: 10px; }
 audio { width: 100%; height: 40px; margin-bottom: 8px; }
 .rate-row { display: flex; gap: 6px; align-items: center; }
@@ -42,7 +43,7 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
 </head>
 <body>
 <h1>Vesper Voice Shootout</h1>
-<p class="subtitle">Gemini TTS — The Weight (S1E09) opening passage &middot; 32 voices</p>
+<p class="subtitle">The Weight (S1E09) opening passage &middot; Gemini TTS (32 voices, 2026-04-15) + Kokoro-82M v1.0 English (28 voices, local on mira, 2026-10-12)</p>
 
 <div class="passage">
 <p><strong>There's a cat I never met.</strong> Her name was Storm. She was feral. Not the romantic kind, not the Instagram kind with a collar and a backstory and a redemption arc. Feral like: she hissed when she loved you. Feral like: she chose you by not running, which was the most she could give, and it was enough.</p>
@@ -57,9 +58,10 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
   <button onclick="playAll()" id="playAllBtn">Play All Sequentially</button>
   <button onclick="stopAll()" class="stop-all">Stop All</button>
   <span style="color:#666;font-size:13px;margin-left:8px">Filter:</span>
-  <button class="filter-btn active" data-filter="all" onclick="filterVoices('all',this)">All (32)</button>
+  <button class="filter-btn active" data-filter="all" onclick="filterVoices('all',this)">All (60)</button>
   <button class="filter-btn" data-filter="3.1" onclick="filterVoices('3.1',this)">3.1 Flash (16)</button>
   <button class="filter-btn" data-filter="2.5" onclick="filterVoices('2.5',this)">2.5 Flash (16)</button>
+  <button class="filter-btn" data-filter="kokoro" onclick="filterVoices('kokoro',this)">Kokoro (28)</button>
   <button class="filter-btn" data-filter="fav" onclick="filterVoices('fav',this)">Favorites</button>
 </div>
 
@@ -74,6 +76,34 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
 
 <script>
 const voices = [
+  { name: "Alloy (US female)", model: "kokoro", file: "kokoro-v1.0_af_alloy.mp3", type: "audio/mpeg", meta: "66.1s \u00b7 1032KB \u00b7 af_alloy" },
+  { name: "Aoede (US female)", model: "kokoro", file: "kokoro-v1.0_af_aoede.mp3", type: "audio/mpeg", meta: "73.1s \u00b7 1142KB \u00b7 af_aoede" },
+  { name: "Bella (US female)", model: "kokoro", file: "kokoro-v1.0_af_bella.mp3", type: "audio/mpeg", meta: "78.7s \u00b7 1230KB \u00b7 af_bella" },
+  { name: "Heart (US female)", model: "kokoro", file: "kokoro-v1.0_af_heart.mp3", type: "audio/mpeg", meta: "75.5s \u00b7 1179KB \u00b7 af_heart" },
+  { name: "Jessica (US female)", model: "kokoro", file: "kokoro-v1.0_af_jessica.mp3", type: "audio/mpeg", meta: "62.0s \u00b7 969KB \u00b7 af_jessica" },
+  { name: "Kore (US female)", model: "kokoro", file: "kokoro-v1.0_af_kore.mp3", type: "audio/mpeg", meta: "71.1s \u00b7 1111KB \u00b7 af_kore" },
+  { name: "Nicole (US female)", model: "kokoro", file: "kokoro-v1.0_af_nicole.mp3", type: "audio/mpeg", meta: "117.4s \u00b7 1834KB \u00b7 af_nicole" },
+  { name: "Nova (US female)", model: "kokoro", file: "kokoro-v1.0_af_nova.mp3", type: "audio/mpeg", meta: "64.8s \u00b7 1013KB \u00b7 af_nova" },
+  { name: "River (US female)", model: "kokoro", file: "kokoro-v1.0_af_river.mp3", type: "audio/mpeg", meta: "61.5s \u00b7 961KB \u00b7 af_river" },
+  { name: "Sarah (US female)", model: "kokoro", file: "kokoro-v1.0_af_sarah.mp3", type: "audio/mpeg", meta: "75.1s \u00b7 1173KB \u00b7 af_sarah" },
+  { name: "Sky (US female)", model: "kokoro", file: "kokoro-v1.0_af_sky.mp3", type: "audio/mpeg", meta: "70.2s \u00b7 1096KB \u00b7 af_sky" },
+  { name: "Adam (US male)", model: "kokoro", file: "kokoro-v1.0_am_adam.mp3", type: "audio/mpeg", meta: "71.3s \u00b7 1114KB \u00b7 am_adam" },
+  { name: "Echo (US male)", model: "kokoro", file: "kokoro-v1.0_am_echo.mp3", type: "audio/mpeg", meta: "67.2s \u00b7 1050KB \u00b7 am_echo" },
+  { name: "Eric (US male)", model: "kokoro", file: "kokoro-v1.0_am_eric.mp3", type: "audio/mpeg", meta: "60.4s \u00b7 944KB \u00b7 am_eric" },
+  { name: "Fenrir (US male)", model: "kokoro", file: "kokoro-v1.0_am_fenrir.mp3", type: "audio/mpeg", meta: "70.5s \u00b7 1101KB \u00b7 am_fenrir" },
+  { name: "Liam (US male)", model: "kokoro", file: "kokoro-v1.0_am_liam.mp3", type: "audio/mpeg", meta: "63.9s \u00b7 999KB \u00b7 am_liam" },
+  { name: "Michael (US male)", model: "kokoro", file: "kokoro-v1.0_am_michael.mp3", type: "audio/mpeg", meta: "83.3s \u00b7 1301KB \u00b7 am_michael" },
+  { name: "Onyx (US male)", model: "kokoro", file: "kokoro-v1.0_am_onyx.mp3", type: "audio/mpeg", meta: "66.6s \u00b7 1040KB \u00b7 am_onyx" },
+  { name: "Puck (US male)", model: "kokoro", file: "kokoro-v1.0_am_puck.mp3", type: "audio/mpeg", meta: "68.8s \u00b7 1074KB \u00b7 am_puck" },
+  { name: "Santa (US male)", model: "kokoro", file: "kokoro-v1.0_am_santa.mp3", type: "audio/mpeg", meta: "73.7s \u00b7 1152KB \u00b7 am_santa" },
+  { name: "Alice (UK female)", model: "kokoro", file: "kokoro-v1.0_bf_alice.mp3", type: "audio/mpeg", meta: "68.4s \u00b7 1069KB \u00b7 bf_alice" },
+  { name: "Emma (UK female)", model: "kokoro", file: "kokoro-v1.0_bf_emma.mp3", type: "audio/mpeg", meta: "69.2s \u00b7 1080KB \u00b7 bf_emma" },
+  { name: "Isabella (UK female)", model: "kokoro", file: "kokoro-v1.0_bf_isabella.mp3", type: "audio/mpeg", meta: "70.0s \u00b7 1094KB \u00b7 bf_isabella" },
+  { name: "Lily (UK female)", model: "kokoro", file: "kokoro-v1.0_bf_lily.mp3", type: "audio/mpeg", meta: "68.4s \u00b7 1069KB \u00b7 bf_lily" },
+  { name: "Daniel (UK male)", model: "kokoro", file: "kokoro-v1.0_bm_daniel.mp3", type: "audio/mpeg", meta: "64.4s \u00b7 1006KB \u00b7 bm_daniel" },
+  { name: "Fable (UK male)", model: "kokoro", file: "kokoro-v1.0_bm_fable.mp3", type: "audio/mpeg", meta: "66.8s \u00b7 1044KB \u00b7 bm_fable" },
+  { name: "George (UK male)", model: "kokoro", file: "kokoro-v1.0_bm_george.mp3", type: "audio/mpeg", meta: "79.3s \u00b7 1239KB \u00b7 bm_george" },
+  { name: "Lewis (UK male)", model: "kokoro", file: "kokoro-v1.0_bm_lewis.mp3", type: "audio/mpeg", meta: "81.0s \u00b7 1265KB \u00b7 bm_lewis" },
   { name: "Algieba", model: "3.1", file: "gemini-3.1-flash-tts-preview_algieba.wav", meta: "104.3s \u00b7 4890KB" },
   { name: "Aoede", model: "3.1", file: "gemini-3.1-flash-tts-preview_aoede.wav", meta: "98.5s \u00b7 4616KB" },
   { name: "Autonoe", model: "3.1", file: "gemini-3.1-flash-tts-preview_autonoe.wav", meta: "101.3s \u00b7 4748KB" },
@@ -108,6 +138,7 @@ const voices = [
   { name: "Zubenelgenubi", model: "2.5", file: "gemini-2.5-flash-preview-tts_zubenelgenubi.wav", meta: "91.3s \u00b7 4282KB" }
 ];
 
+function modelLabel(v) { return v.model === '2.5' ? '2.5 Flash' : v.model === 'kokoro' ? 'Kokoro' : '3.1 Flash'; }
 const LS_RATINGS_KEY = 'vesper-shootout-ratings';
 const LS_FAVS_KEY = 'vesper-shootout-favorites';
 
@@ -136,8 +167,8 @@ function saveFavorites() {
 function buildGrid() {
   const grid = document.getElementById('grid');
   grid.innerHTML = voices.map((v, i) => {
-    const badgeClass = v.model === '2.5' ? 'model-badge m25' : 'model-badge';
-    const badgeText = v.model === '2.5' ? '2.5 Flash' : '3.1 Flash';
+    const badgeClass = v.model === '2.5' ? 'model-badge m25' : v.model === 'kokoro' ? 'model-badge kokoro' : 'model-badge';
+    const badgeText = modelLabel(v);
     const isFav = favorites.has(i);
     const rating = ratings[i] || 0;
     return `
@@ -151,7 +182,7 @@ function buildGrid() {
       </div>
       <div class="meta">${v.meta}</div>
       <audio id="audio-${i}" controls preload="none">
-        <source src="audio/${v.file}" type="audio/wav">
+        <source src="audio/${v.file}" type="${v.type || 'audio/wav'}">
       </audio>
       <div class="rate-row">
         ${[1,2,3,4,5].map(s => `<span class="star${s <= rating ? ' on' : ''}" id="star-${i}-${s}" onclick="rate(${i},${s})">\u2605</span>`).join('')}
@@ -203,8 +234,7 @@ function updateRankings() {
   }
   list.innerHTML = sorted.map(([idx, score]) => {
     const v = voices[idx];
-    const modelLabel = v.model === '2.5' ? '2.5 Flash' : '3.1 Flash';
-    return '<li><strong>' + v.name + '</strong> (' + modelLabel + ') \u2014 ' + score + '/5</li>';
+    return '<li><strong>' + v.name + '</strong> (' + modelLabel(v) + ') \u2014 ' + score + '/5</li>';
   }).join('');
 }
 
