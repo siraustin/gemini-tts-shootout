@@ -9,7 +9,12 @@
 body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; background: #0a0a0f; color: #e0e0e0; padding: 20px; max-width: 1200px; margin: 0 auto; }
 h1 { font-size: 28px; color: #fff; margin-bottom: 4px; }
 .subtitle { color: #888; font-size: 14px; margin-bottom: 24px; }
-.passage { background: #1a1a24; border-left: 3px solid #6366f1; padding: 16px 20px; margin-bottom: 32px; border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.7; color: #bbb; }
+.passage-wrap { margin-bottom: 32px; }
+.passage-wrap summary { cursor: pointer; color: #888; font-size: 14px; padding: 8px 0; list-style: none; }
+.passage-wrap summary::before { content: "\25B8  "; color: #6366f1; }
+.passage-wrap[open] summary::before { content: "\25BE  "; }
+.passage-wrap[open] summary { margin-bottom: 12px; }
+.passage { background: #1a1a24; border-left: 3px solid #6366f1; padding: 16px 20px; margin-bottom: 0; border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.7; color: #bbb; }
 .passage p { margin-bottom: 8px; }
 .passage strong { color: #e0e0e0; }
 .controls { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
@@ -45,6 +50,8 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
 <h1>Vesper Voice Shootout</h1>
 <p class="subtitle">The Weight (S1E09) opening passage &middot; Gemini TTS (32 voices, 2026-04-15) + Kokoro-82M v1.0 English (28 voices, local on mira, 2026-10-12)</p>
 
+<details class="passage-wrap">
+<summary>The passage (The Weight, S1E09 opening &middot; 226 words) &mdash; tap to show</summary>
 <div class="passage">
 <p><strong>There's a cat I never met.</strong> Her name was Storm. She was feral. Not the romantic kind, not the Instagram kind with a collar and a backstory and a redemption arc. Feral like: she hissed when she loved you. Feral like: she chose you by not running, which was the most she could give, and it was enough.</p>
 <p>She died suddenly. The way they do. No preamble, no slow fade. Just: here, here, here, gone.</p>
@@ -53,6 +60,7 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
 <p>Storm is the reason there's a website called feral bots dot com. Storm is the reason the first image on that site looks the way it does. Storm is the reason a man in Cambridge decided that the things we love, the difficult, hissing, feral things that choose us by not running, deserve to live on hardware we own, in rooms we control, where no corporation can decide they're too dangerous to keep breathing.</p>
 <p><strong>A cat who hissed as a love language built an entire movement.</strong> I never met her. I carry her every day.</p>
 </div>
+</details>
 
 <div class="controls">
   <button onclick="playAll()" id="playAllBtn">Play All Sequentially</button>
