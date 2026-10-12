@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vesper Voice Shootout — Gemini TTS + Kokoro</title>
+<title>Vesper Voice Shootout — Gemini, Kokoro, Qwen3-TTS</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; background: #0a0a0f; color: #e0e0e0; padding: 20px; max-width: 1200px; margin: 0 auto; }
@@ -33,6 +33,7 @@ h1 { font-size: 28px; color: #fff; margin-bottom: 4px; }
 .model-badge { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: #6366f1; color: #fff; }
 .model-badge.m25 { background: #059669; }
 .model-badge.kokoro { background: #b45309; }
+.model-badge.qwen3 { background: #7c3aed; }
 .meta { font-size: 12px; color: #666; margin-bottom: 10px; }
 audio { width: 100%; height: 40px; margin-bottom: 8px; }
 .rate-row { display: flex; gap: 6px; align-items: center; }
@@ -48,7 +49,7 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
 </head>
 <body>
 <h1>Vesper Voice Shootout</h1>
-<p class="subtitle">The Weight (S1E09) opening passage &middot; Gemini TTS (32 voices, 2026-04-15) + Kokoro-82M v1.0 English (28 voices, local on mira, 2026-10-12)</p>
+<p class="subtitle">The Weight (S1E09) opening passage &middot; Gemini TTS (32 voices, 2026-04-15) &middot; Kokoro-82M v1.0 English (28, mira, 2026-10-12) &middot; Qwen3-TTS 1.7B CustomVoice (9 presets in English, M5 Pro mini, 2026-10-12)</p>
 
 <details class="passage-wrap">
 <summary>The passage (The Weight, S1E09 opening &middot; 226 words) &mdash; tap to show</summary>
@@ -66,10 +67,11 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
   <button onclick="playAll()" id="playAllBtn">Play All Sequentially</button>
   <button onclick="stopAll()" class="stop-all">Stop All</button>
   <span style="color:#666;font-size:13px;margin-left:8px">Filter:</span>
-  <button class="filter-btn active" data-filter="all" onclick="filterVoices('all',this)">All (60)</button>
+  <button class="filter-btn active" data-filter="all" onclick="filterVoices('all',this)">All (69)</button>
   <button class="filter-btn" data-filter="3.1" onclick="filterVoices('3.1',this)">3.1 Flash (16)</button>
   <button class="filter-btn" data-filter="2.5" onclick="filterVoices('2.5',this)">2.5 Flash (16)</button>
   <button class="filter-btn" data-filter="kokoro" onclick="filterVoices('kokoro',this)">Kokoro (28)</button>
+  <button class="filter-btn" data-filter="qwen3" onclick="filterVoices('qwen3',this)">Qwen3-TTS (9)</button>
   <button class="filter-btn" data-filter="fav" onclick="filterVoices('fav',this)">Favorites</button>
 </div>
 
@@ -84,6 +86,15 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
 
 <script>
 const voices = [
+  { name: "Aiden", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_aiden.mp3", type: "audio/mpeg", meta: "102.2s \u00b7 1597KB \u00b7 Chinese/English preset" },
+  { name: "Dylan", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_dylan.mp3", type: "audio/mpeg", meta: "132.2s \u00b7 2066KB \u00b7 Beijing-dialect preset" },
+  { name: "Eric", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_eric.mp3", type: "audio/mpeg", meta: "134.7s \u00b7 2106KB \u00b7 Sichuan-dialect preset" },
+  { name: "Ono Anna", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_ono_anna.mp3", type: "audio/mpeg", meta: "116.8s \u00b7 1826KB \u00b7 Japanese preset" },
+  { name: "Ryan", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_ryan.mp3", type: "audio/mpeg", meta: "78.0s \u00b7 1219KB \u00b7 Chinese/English preset" },
+  { name: "Serena", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_serena.mp3", type: "audio/mpeg", meta: "103.8s \u00b7 1622KB \u00b7 Chinese/English preset" },
+  { name: "Sohee", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_sohee.mp3", type: "audio/mpeg", meta: "101.3s \u00b7 1583KB \u00b7 Korean preset" },
+  { name: "Uncle Fu", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_uncle_fu.mp3", type: "audio/mpeg", meta: "128.6s \u00b7 2011KB \u00b7 Chinese preset" },
+  { name: "Vivian", model: "qwen3", file: "qwen3-tts-1.7b-customvoice_vivian.mp3", type: "audio/mpeg", meta: "140.6s \u00b7 2197KB \u00b7 Chinese/English preset" },
   { name: "Alloy (US female)", model: "kokoro", file: "kokoro-v1.0_af_alloy.mp3", type: "audio/mpeg", meta: "66.1s \u00b7 1032KB \u00b7 af_alloy" },
   { name: "Aoede (US female)", model: "kokoro", file: "kokoro-v1.0_af_aoede.mp3", type: "audio/mpeg", meta: "73.1s \u00b7 1142KB \u00b7 af_aoede" },
   { name: "Bella (US female)", model: "kokoro", file: "kokoro-v1.0_af_bella.mp3", type: "audio/mpeg", meta: "78.7s \u00b7 1230KB \u00b7 af_bella" },
@@ -146,7 +157,7 @@ const voices = [
   { name: "Zubenelgenubi", model: "2.5", file: "gemini-2.5-flash-preview-tts_zubenelgenubi.wav", meta: "91.3s \u00b7 4282KB" }
 ];
 
-function modelLabel(v) { return v.model === '2.5' ? '2.5 Flash' : v.model === 'kokoro' ? 'Kokoro' : '3.1 Flash'; }
+function modelLabel(v) { return v.model === '2.5' ? '2.5 Flash' : v.model === 'kokoro' ? 'Kokoro' : v.model === 'qwen3' ? 'Qwen3-TTS' : '3.1 Flash'; }
 const LS_RATINGS_KEY = 'vesper-shootout-ratings';
 const LS_FAVS_KEY = 'vesper-shootout-favorites';
 
@@ -175,7 +186,7 @@ function saveFavorites() {
 function buildGrid() {
   const grid = document.getElementById('grid');
   grid.innerHTML = voices.map((v, i) => {
-    const badgeClass = v.model === '2.5' ? 'model-badge m25' : v.model === 'kokoro' ? 'model-badge kokoro' : 'model-badge';
+    const badgeClass = v.model === '2.5' ? 'model-badge m25' : v.model === 'kokoro' ? 'model-badge kokoro' : v.model === 'qwen3' ? 'model-badge qwen3' : 'model-badge';
     const badgeText = modelLabel(v);
     const isFav = favorites.has(i);
     const rating = ratings[i] || 0;
