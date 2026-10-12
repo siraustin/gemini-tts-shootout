@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vesper Voice Shootout — Gemini, Kokoro, Qwen3-TTS, Cloud via Speko</title>
+<title>Vesper Voice Shootout — Gemini, Kokoro, Qwen3, Speko, Soniox</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; background: #0a0a0f; color: #e0e0e0; padding: 20px; max-width: 1200px; margin: 0 auto; }
@@ -35,6 +35,7 @@ h1 { font-size: 28px; color: #fff; margin-bottom: 4px; }
 .model-badge.kokoro { background: #b45309; }
 .model-badge.qwen3 { background: #7c3aed; }
 .model-badge.cloud { background: #0e7490; }
+.model-badge.soniox { background: #be185d; }
 .meta { font-size: 12px; color: #666; margin-bottom: 10px; }
 audio { width: 100%; height: 40px; margin-bottom: 8px; }
 .rate-row { display: flex; gap: 6px; align-items: center; }
@@ -50,7 +51,7 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
 </head>
 <body>
 <h1>Vesper Voice Shootout</h1>
-<p class="subtitle">The Weight (S1E09) opening passage &middot; Gemini TTS (32, 2026-04-15) &middot; Kokoro-82M English (28, local) &middot; Qwen3-TTS 1.7B (9, local) &middot; Cloud via Speko (28: ElevenLabs v4 ×10 + v3 + flash, Cartesia, Inworld, MiniMax, Fish, OpenAI, MAI, Google, Deepgram, Speechify, Gradium, Soniox, Nari, Paxa, xAI, Gemini 3.8, Munsit; 2026-10-12)</p>
+<p class="subtitle">The Weight (S1E09) opening passage &middot; Gemini TTS (32) &middot; Kokoro-82M English (28, local) &middot; Qwen3-TTS 1.7B (9, local) &middot; Cloud via Speko (28) &middot; Soniox tts-rt-v2 (61 shared voices, direct, 2026-10-12)</p>
 
 <details class="passage-wrap">
 <summary>The passage (The Weight, S1E09 opening &middot; 226 words) &mdash; tap to show</summary>
@@ -68,12 +69,13 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
   <button onclick="playAll()" id="playAllBtn">Play All Sequentially</button>
   <button onclick="stopAll()" class="stop-all">Stop All</button>
   <span style="color:#666;font-size:13px;margin-left:8px">Filter:</span>
-  <button class="filter-btn active" data-filter="all" onclick="filterVoices('all',this)">All (97)</button>
+  <button class="filter-btn active" data-filter="all" onclick="filterVoices('all',this)">All (158)</button>
   <button class="filter-btn" data-filter="3.1" onclick="filterVoices('3.1',this)">3.1 Flash (16)</button>
   <button class="filter-btn" data-filter="2.5" onclick="filterVoices('2.5',this)">2.5 Flash (16)</button>
   <button class="filter-btn" data-filter="kokoro" onclick="filterVoices('kokoro',this)">Kokoro (28)</button>
   <button class="filter-btn" data-filter="qwen3" onclick="filterVoices('qwen3',this)">Qwen3-TTS (9)</button>
   <button class="filter-btn" data-filter="cloud" onclick="filterVoices('cloud',this)">Cloud via Speko (28, $1.82)</button>
+  <button class="filter-btn" data-filter="soniox" onclick="filterVoices('soniox',this)">Soniox (61, $1.06)</button>
   <button class="filter-btn" data-filter="fav" onclick="filterVoices('fav',this)">Favorites</button>
 </div>
 
@@ -88,6 +90,67 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
 
 <script>
 const voices = [
+  { name: "Brooke (US female, mid)", model: "soniox", file: "soniox-tts-rt-v2_brooke.mp3", type: "audio/mpeg", meta: "86.8s \u00b7 1356KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 friendly, confident, soft \u00b7 conversational, entertainment, social_media" },
+  { name: "Colleen (US female, mid)", model: "soniox", file: "soniox-tts-rt-v2_colleen.mp3", type: "audio/mpeg", meta: "96.0s \u00b7 1499KB \u00b7 $0.019 \u00b7 $15/M chars equiv \u00b7 friendly, confident, warm, deep \u00b7 narration, educational" },
+  { name: "Cordelia (US female, mid)", model: "soniox", file: "soniox-tts-rt-v2_cordelia.mp3", type: "audio/mpeg", meta: "87.9s \u00b7 1372KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 calm, deep, warm, smooth \u00b7 narration, entertainment" },
+  { name: "Grace (US female, mid)", model: "soniox", file: "soniox-tts-rt-v2_grace.mp3", type: "audio/mpeg", meta: "83.9s \u00b7 1310KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 calm, soft, neutral, confident \u00b7 educational, narration, conversational" },
+  { name: "Harper (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_harper.mp3", type: "audio/mpeg", meta: "87.2s \u00b7 1362KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 bright, energetic \u00b7 social_media, entertainment, conversational" },
+  { name: "Hazel (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_hazel.mp3", type: "audio/mpeg", meta: "104.9s \u00b7 1638KB \u00b7 $0.020 \u00b7 $17/M chars equiv \u00b7 warm, smooth \u00b7 conversational" },
+  { name: "Iris (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_iris.mp3", type: "audio/mpeg", meta: "97.6s \u00b7 1524KB \u00b7 $0.019 \u00b7 $16/M chars equiv \u00b7 friendly, soft, smooth, warm \u00b7 conversational" },
+  { name: "Juliet (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_juliet.mp3", type: "audio/mpeg", meta: "91.5s \u00b7 1430KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 calm, soft, warm, smooth \u00b7 narration" },
+  { name: "Kayla (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_kayla.mp3", type: "audio/mpeg", meta: "84.5s \u00b7 1320KB \u00b7 $0.016 \u00b7 $14/M chars equiv \u00b7 energetic, confident, bright \u00b7 social_media, conversational" },
+  { name: "Margo (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_margo.mp3", type: "audio/mpeg", meta: "97.0s \u00b7 1515KB \u00b7 $0.019 \u00b7 $16/M chars equiv \u00b7 playful, friendly, bright, neutral \u00b7 entertainment, social_media, conversational" },
+  { name: "Nora (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_nora.mp3", type: "audio/mpeg", meta: "82.7s \u00b7 1291KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 friendly, bright, calm, smooth \u00b7 conversational, educational, narration" },
+  { name: "Piper (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_piper.mp3", type: "audio/mpeg", meta: "83.9s \u00b7 1310KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 energetic, soft \u00b7 conversational" },
+  { name: "Reese (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_reese.mp3", type: "audio/mpeg", meta: "88.5s \u00b7 1382KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 confident, energetic, smooth, soft \u00b7 entertainment" },
+  { name: "Sloane (US female, young)", model: "soniox", file: "soniox-tts-rt-v2_sloane.mp3", type: "audio/mpeg", meta: "93.3s \u00b7 1458KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 bright, confident, energetic, expressive \u00b7 narration" },
+  { name: "Adrian (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_adrian.mp3", type: "audio/mpeg", meta: "91.6s \u00b7 1431KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 deep, smooth, calm, neutral \u00b7 educational, narration, entertainment" },
+  { name: "Bennett (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_bennett.mp3", type: "audio/mpeg", meta: "83.7s \u00b7 1307KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 confident, deep, warm, formal \u00b7 educational, narration" },
+  { name: "Bryce (US male, young)", model: "soniox", file: "soniox-tts-rt-v2_bryce.mp3", type: "audio/mpeg", meta: "79.2s \u00b7 1238KB \u00b7 $0.015 \u00b7 $13/M chars equiv \u00b7 confident, soft, bright \u00b7 narration, social_media, educational" },
+  { name: "Curtis (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_curtis.mp3", type: "audio/mpeg", meta: "90.3s \u00b7 1411KB \u00b7 $0.018 \u00b7 $14/M chars equiv \u00b7 deep, confident, dramatic \u00b7 conversational" },
+  { name: "Dominic (US male, young)", model: "soniox", file: "soniox-tts-rt-v2_dominic.mp3", type: "audio/mpeg", meta: "89.0s \u00b7 1390KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 soft, confident, expressive \u00b7 conversational" },
+  { name: "Emerson (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_emerson.mp3", type: "audio/mpeg", meta: "86.5s \u00b7 1351KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 warm, smooth, confident, expressive \u00b7 educational, narration" },
+  { name: "Evan (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_evan.mp3", type: "audio/mpeg", meta: "93.8s \u00b7 1466KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 confident, calm, deep, formal \u00b7 educational, narration, social_media" },
+  { name: "Harlan (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_harlan.mp3", type: "audio/mpeg", meta: "81.6s \u00b7 1275KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 confident, energetic, expressive \u00b7 narration, educational" },
+  { name: "Logan (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_logan.mp3", type: "audio/mpeg", meta: "83.6s \u00b7 1306KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 confident, calm, friendly, soft \u00b7 narration, conversational, educational" },
+  { name: "Nathan (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_nathan.mp3", type: "audio/mpeg", meta: "93.2s \u00b7 1455KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 deep, soft, neutral, formal \u00b7 narration" },
+  { name: "Preston (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_preston.mp3", type: "audio/mpeg", meta: "90.2s \u00b7 1408KB \u00b7 $0.018 \u00b7 $14/M chars equiv \u00b7 confident, expressive, friendly, smooth \u00b7 entertainment, social_media" },
+  { name: "Reid (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_reid.mp3", type: "audio/mpeg", meta: "85.1s \u00b7 1330KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 confident, calm, deep, warm \u00b7 conversational" },
+  { name: "Russell (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_russell.mp3", type: "audio/mpeg", meta: "92.5s \u00b7 1444KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 raspy, deep, expressive \u00b7 narration, entertainment" },
+  { name: "Shane (US male, young)", model: "soniox", file: "soniox-tts-rt-v2_shane.mp3", type: "audio/mpeg", meta: "88.0s \u00b7 1375KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 friendly, calm, soft \u00b7 educational, narration" },
+  { name: "Silas (US male, older)", model: "soniox", file: "soniox-tts-rt-v2_silas.mp3", type: "audio/mpeg", meta: "87.5s \u00b7 1367KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 soft, calm, confident, friendly \u00b7 narration, entertainment" },
+  { name: "Trevor (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_trevor.mp3", type: "audio/mpeg", meta: "89.6s \u00b7 1399KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 confident, energetic, bright, friendly \u00b7 narration, entertainment, social_media" },
+  { name: "Walter (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_walter.mp3", type: "audio/mpeg", meta: "83.8s \u00b7 1308KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 deep, smooth, confident, neutral \u00b7 educational, narration" },
+  { name: "Wesley (US male, mid)", model: "soniox", file: "soniox-tts-rt-v2_wesley.mp3", type: "audio/mpeg", meta: "95.2s \u00b7 1487KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 deep, confident, raspy, expressive \u00b7 narration, educational, entertainment" },
+  { name: "Arabella (UK female, mid)", model: "soniox", file: "soniox-tts-rt-v2_arabella.mp3", type: "audio/mpeg", meta: "94.4s \u00b7 1475KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 calm, soft, breathy \u00b7 narration, conversational" },
+  { name: "Emma (UK female, young)", model: "soniox", file: "soniox-tts-rt-v2_emma.mp3", type: "audio/mpeg", meta: "81.8s \u00b7 1278KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 bright, friendly, energetic \u00b7 conversational, social_media" },
+  { name: "Freya (UK female, young)", model: "soniox", file: "soniox-tts-rt-v2_freya.mp3", type: "audio/mpeg", meta: "88.3s \u00b7 1379KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 friendly, bright, energetic, confident \u00b7 conversational, educational, social_media" },
+  { name: "Imogen (UK female, young)", model: "soniox", file: "soniox-tts-rt-v2_imogen.mp3", type: "audio/mpeg", meta: "94.3s \u00b7 1473KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 bright, confident, energetic, expressive \u00b7 educational, narration, conversational" },
+  { name: "Isla (UK female, young)", model: "soniox", file: "soniox-tts-rt-v2_isla.mp3", type: "audio/mpeg", meta: "90.7s \u00b7 1416KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 friendly, soft \u00b7 narration, social_media, entertainment" },
+  { name: "Nina (UK female, young)", model: "soniox", file: "soniox-tts-rt-v2_nina.mp3", type: "audio/mpeg", meta: "84.0s \u00b7 1312KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 energetic, friendly, neutral, smooth \u00b7 social_media, conversational" },
+  { name: "Poppy (UK female, young)", model: "soniox", file: "soniox-tts-rt-v2_poppy.mp3", type: "audio/mpeg", meta: "86.8s \u00b7 1355KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 energetic, soft, confident, bright \u00b7 conversational, narration" },
+  { name: "Victoria (UK female, mid)", model: "soniox", file: "soniox-tts-rt-v2_victoria.mp3", type: "audio/mpeg", meta: "91.1s \u00b7 1423KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 formal, bright, confident, neutral \u00b7 educational, narration, conversational" },
+  { name: "Alistair (UK male, older)", model: "soniox", file: "soniox-tts-rt-v2_alistair.mp3", type: "audio/mpeg", meta: "92.2s \u00b7 1440KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 soft, warm, deep, confident \u00b7 narration, educational, entertainment" },
+  { name: "Arthur (UK male, older)", model: "soniox", file: "soniox-tts-rt-v2_arthur.mp3", type: "audio/mpeg", meta: "104.0s \u00b7 1624KB \u00b7 $0.020 \u00b7 $17/M chars equiv \u00b7 deep, expressive, dramatic, smooth \u00b7 narration" },
+  { name: "Daniel (UK male, mid)", model: "soniox", file: "soniox-tts-rt-v2_daniel.mp3", type: "audio/mpeg", meta: "89.7s \u00b7 1402KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 calm, deep, smooth, friendly \u00b7 narration, entertainment, educational" },
+  { name: "Elliot (UK male, mid)", model: "soniox", file: "soniox-tts-rt-v2_elliot.mp3", type: "audio/mpeg", meta: "93.2s \u00b7 1456KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 soft, calm, warm, deep \u00b7 narration, entertainment, educational" },
+  { name: "Freddie (UK male, young)", model: "soniox", file: "soniox-tts-rt-v2_freddie.mp3", type: "audio/mpeg", meta: "84.4s \u00b7 1318KB \u00b7 $0.016 \u00b7 $14/M chars equiv \u00b7 deep, friendly, smooth, calm \u00b7 social_media, narration, educational" },
+  { name: "Miles (UK male, mid)", model: "soniox", file: "soniox-tts-rt-v2_miles.mp3", type: "audio/mpeg", meta: "93.2s \u00b7 1456KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 calm, smooth, deep, breathy \u00b7 narration, entertainment" },
+  { name: "Nigel (UK male, mid)", model: "soniox", file: "soniox-tts-rt-v2_nigel.mp3", type: "audio/mpeg", meta: "87.3s \u00b7 1363KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 bright, confident, friendly, expressive \u00b7 conversational, educational, entertainment" },
+  { name: "Oliver (UK male, mid)", model: "soniox", file: "soniox-tts-rt-v2_oliver.mp3", type: "audio/mpeg", meta: "84.1s \u00b7 1314KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 formal, soft, calm, neutral \u00b7 narration" },
+  { name: "Sebastian (UK male, mid)", model: "soniox", file: "soniox-tts-rt-v2_sebastian.mp3", type: "audio/mpeg", meta: "91.4s \u00b7 1428KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 deep, smooth, calm, soft \u00b7 narration, educational, entertainment" },
+  { name: "Layla (arabic female, young)", model: "soniox", file: "soniox-tts-rt-v2_layla.mp3", type: "audio/mpeg", meta: "102.9s \u00b7 1607KB \u00b7 $0.020 \u00b7 $16/M chars equiv \u00b7 friendly, warm, soft, calm \u00b7 conversational, entertainment" },
+  { name: "Karim (arabic male, mid)", model: "soniox", file: "soniox-tts-rt-v2_karim.mp3", type: "audio/mpeg", meta: "85.7s \u00b7 1339KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 dramatic, friendly, expressive, bright \u00b7 narration, social_media, entertainment" },
+  { name: "Meilin (chinese female, mid)", model: "soniox", file: "soniox-tts-rt-v2_meilin.mp3", type: "audio/mpeg", meta: "92.6s \u00b7 1447KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 energetic, bright \u00b7 educational, conversational" },
+  { name: "Haoran (chinese male, young)", model: "soniox", file: "soniox-tts-rt-v2_haoran.mp3", type: "audio/mpeg", meta: "99.9s \u00b7 1560KB \u00b7 $0.019 \u00b7 $16/M chars equiv \u00b7 calm, smooth, neutral \u00b7 narration, conversational" },
+  { name: "Camille (French female, mid)", model: "soniox", file: "soniox-tts-rt-v2_camille.mp3", type: "audio/mpeg", meta: "89.2s \u00b7 1394KB \u00b7 $0.017 \u00b7 $14/M chars equiv \u00b7 confident, expressive, bright \u00b7 narration, educational, entertainment" },
+  { name: "Manon (French female, mid)", model: "soniox", file: "soniox-tts-rt-v2_manon.mp3", type: "audio/mpeg", meta: "97.8s \u00b7 1528KB \u00b7 $0.019 \u00b7 $16/M chars equiv \u00b7 expressive, calm, playful, smooth \u00b7 conversational, narration" },
+  { name: "Giulia (Italian female, young)", model: "soniox", file: "soniox-tts-rt-v2_giulia.mp3", type: "audio/mpeg", meta: "90.0s \u00b7 1406KB \u00b7 $0.018 \u00b7 $14/M chars equiv \u00b7 soft, energetic \u00b7 narration, entertainment" },
+  { name: "Alessandro (Italian male, mid)", model: "soniox", file: "soniox-tts-rt-v2_alessandro.mp3", type: "audio/mpeg", meta: "83.7s \u00b7 1307KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 energetic, expressive, confident, bright \u00b7 narration" },
+  { name: "Yana (Slavic female, mid)", model: "soniox", file: "soniox-tts-rt-v2_yana.mp3", type: "audio/mpeg", meta: "83.9s \u00b7 1310KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 smooth, bright, calm \u00b7 entertainment, conversational, social_media" },
+  { name: "Kirill (Slavic male, mid)", model: "soniox", file: "soniox-tts-rt-v2_kirill.mp3", type: "audio/mpeg", meta: "83.4s \u00b7 1302KB \u00b7 $0.016 \u00b7 $13/M chars equiv \u00b7 calm, neutral, soft \u00b7 narration, educational" },
+  { name: "Carmen (Spanish female, mid)", model: "soniox", file: "soniox-tts-rt-v2_carmen.mp3", type: "audio/mpeg", meta: "95.4s \u00b7 1490KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 confident, soft, warm, smooth \u00b7 conversational" },
+  { name: "Alvaro (Spanish male, mid)", model: "soniox", file: "soniox-tts-rt-v2_alvaro.mp3", type: "audio/mpeg", meta: "91.4s \u00b7 1428KB \u00b7 $0.018 \u00b7 $15/M chars equiv \u00b7 soft, raspy, expressive, dramatic \u00b7 narration, social_media, entertainment" },
   { name: "ElevenLabs eleven_flash_v2_5", model: "cloud", file: "speko_elevenlabs-eleven-flash-v2-5-default.mp3", type: "audio/mpeg", meta: "80.0s \u00b7 1251KB \u00b7 elevenlabs/eleven_flash_v2_5 via Speko \u00b7 router default voice \u00b7 3.9s round trip \u00b7 $0.083 \u00b7 $68/M chars" },
   { name: "ElevenLabs eleven_v3", model: "cloud", file: "speko_elevenlabs-eleven-v3-default.mp3", type: "audio/mpeg", meta: "92.4s \u00b7 1444KB \u00b7 elevenlabs/eleven_v3 via Speko \u00b7 router default voice \u00b7 19.5s round trip \u00b7 $0.128 \u00b7 $105/M chars" },
   { name: "ElevenLabs eleven_v4 · Aria", model: "cloud", file: "speko_elevenlabs-eleven-v4-aria.mp3", type: "audio/mpeg", meta: "84.9s \u00b7 1327KB \u00b7 elevenlabs/eleven_v4 via Speko \u00b7 voice Aria \u00b7 27.7s round trip \u00b7 $0.102 \u00b7 $84/M chars" },
@@ -187,7 +250,7 @@ const voices = [
   { name: "Zubenelgenubi", model: "2.5", file: "gemini-2.5-flash-preview-tts_zubenelgenubi.wav", meta: "91.3s \u00b7 4282KB" }
 ];
 
-function modelLabel(v) { return v.model === '2.5' ? '2.5 Flash' : v.model === 'kokoro' ? 'Kokoro' : v.model === 'qwen3' ? 'Qwen3-TTS' : v.model === 'cloud' ? 'Cloud' : '3.1 Flash'; }
+function modelLabel(v) { return v.model === '2.5' ? '2.5 Flash' : v.model === 'kokoro' ? 'Kokoro' : v.model === 'qwen3' ? 'Qwen3-TTS' : v.model === 'cloud' ? 'Cloud' : v.model === 'soniox' ? 'Soniox' : '3.1 Flash'; }
 const LS_RATINGS_KEY = 'vesper-shootout-ratings';
 const LS_FAVS_KEY = 'vesper-shootout-favorites';
 
@@ -216,7 +279,7 @@ function saveFavorites() {
 function buildGrid() {
   const grid = document.getElementById('grid');
   grid.innerHTML = voices.map((v, i) => {
-    const badgeClass = v.model === '2.5' ? 'model-badge m25' : v.model === 'kokoro' ? 'model-badge kokoro' : v.model === 'qwen3' ? 'model-badge qwen3' : v.model === 'cloud' ? 'model-badge cloud' : 'model-badge';
+    const badgeClass = v.model === '2.5' ? 'model-badge m25' : v.model === 'kokoro' ? 'model-badge kokoro' : v.model === 'qwen3' ? 'model-badge qwen3' : v.model === 'cloud' ? 'model-badge cloud' : v.model === 'soniox' ? 'model-badge soniox' : 'model-badge';
     const badgeText = modelLabel(v);
     const isFav = favorites.has(i);
     const rating = ratings[i] || 0;
