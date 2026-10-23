@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vesper Voice Shootout — Gemini, Kokoro, Qwen3, Speko, Soniox</title>
+<title>Vesper Voice Shootout — Gemini, Kokoro, Qwen3, Speko, Soniox, Ming</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; background: #0a0a0f; color: #e0e0e0; padding: 20px; max-width: 1200px; margin: 0 auto; }
@@ -36,6 +36,7 @@ h1 { font-size: 28px; color: #fff; margin-bottom: 4px; }
 .model-badge.qwen3 { background: #7c3aed; }
 .model-badge.cloud { background: #0e7490; }
 .model-badge.soniox { background: #be185d; }
+.model-badge.ming { background: #d97706; }
 .meta { font-size: 12px; color: #666; margin-bottom: 10px; }
 audio { width: 100%; height: 40px; margin-bottom: 8px; }
 .rate-row { display: flex; gap: 6px; align-items: center; }
@@ -69,13 +70,14 @@ audio { width: 100%; height: 40px; margin-bottom: 8px; }
   <button onclick="playAll()" id="playAllBtn">Play All Sequentially</button>
   <button onclick="stopAll()" class="stop-all">Stop All</button>
   <span style="color:#666;font-size:13px;margin-left:8px">Filter:</span>
-  <button class="filter-btn active" data-filter="all" onclick="filterVoices('all',this)">All (158)</button>
+  <button class="filter-btn active" data-filter="all" onclick="filterVoices('all',this)">All (164)</button>
   <button class="filter-btn" data-filter="3.1" onclick="filterVoices('3.1',this)">3.1 Flash (16)</button>
   <button class="filter-btn" data-filter="2.5" onclick="filterVoices('2.5',this)">2.5 Flash (16)</button>
   <button class="filter-btn" data-filter="kokoro" onclick="filterVoices('kokoro',this)">Kokoro (28)</button>
   <button class="filter-btn" data-filter="qwen3" onclick="filterVoices('qwen3',this)">Qwen3-TTS (9)</button>
   <button class="filter-btn" data-filter="cloud" onclick="filterVoices('cloud',this)">Cloud via Speko (28, $1.82)</button>
   <button class="filter-btn" data-filter="soniox" onclick="filterVoices('soniox',this)">Soniox (61, $1.06)</button>
+  <button class="filter-btn" data-filter="ming" onclick="filterVoices('ming',this)">Ming 0.5B (6)</button>
   <button class="filter-btn" data-filter="fav" onclick="filterVoices('fav',this)">Favorites</button>
 </div>
 
@@ -247,10 +249,16 @@ const voices = [
   { name: "Schedar", model: "2.5", file: "gemini-2.5-flash-preview-tts_schedar.wav", meta: "94.5s \u00b7 4428KB" },
   { name: "Sulafat", model: "2.5", file: "gemini-2.5-flash-preview-tts_sulafat.wav", meta: "99.2s \u00b7 4651KB" },
   { name: "Vindemiatrix", model: "2.5", file: "gemini-2.5-flash-preview-tts_vindemiatrix.wav", meta: "93.5s \u00b7 4383KB" },
-  { name: "Zubenelgenubi", model: "2.5", file: "gemini-2.5-flash-preview-tts_zubenelgenubi.wav", meta: "91.3s \u00b7 4282KB" }
+  { name: "Zubenelgenubi", model: "2.5", file: "gemini-2.5-flash-preview-tts_zubenelgenubi.wav", meta: "91.3s \u00b7 4282KB" },
+  { name: "Stella (US female)", model: "ming", file: "ming-3.0-tts-0.5b_us_stella.mp3", type: "audio/mpeg", meta: "75.3s \u00b7 865KB \u00b7 built-in US_Stella \u00b7 Ming-3.0-tts-0.5B ref impl, GB10, free" },
+  { name: "Emma (US female)", model: "ming", file: "ming-3.0-tts-0.5b_us_emma.mp3", type: "audio/mpeg", meta: "81.2s \u00b7 968KB \u00b7 built-in US_Emma \u00b7 Ming-3.0-tts-0.5B ref impl, GB10, free" },
+  { name: "Charlotte (UK female)", model: "ming", file: "ming-3.0-tts-0.5b_uk_charlotte.mp3", type: "audio/mpeg", meta: "82.7s \u00b7 1026KB \u00b7 built-in UK_Charlotte \u00b7 Ming-3.0-tts-0.5B ref impl, GB10, free" },
+  { name: "James (US male)", model: "ming", file: "ming-3.0-tts-0.5b_us_james.mp3", type: "audio/mpeg", meta: "75.6s \u00b7 945KB \u00b7 built-in US_James \u00b7 Ming-3.0-tts-0.5B ref impl, GB10, free" },
+  { name: "George (UK male)", model: "ming", file: "ming-3.0-tts-0.5b_uk_george.mp3", type: "audio/mpeg", meta: "85.8s \u00b7 1101KB \u00b7 built-in UK_George \u00b7 Ming-3.0-tts-0.5B ref impl, GB10, free" },
+  { name: "Carina clone (Grok ref)", model: "ming", file: "ming-3.0-tts-0.5b_carina-clone.mp3", type: "audio/mpeg", meta: "65.8s \u00b7 745KB \u00b7 zero-shot clone of Grok Carina, 16 s ref + CAM++ emb \u00b7 Ming-3.0-tts-0.5B ref impl, GB10, free" }
 ];
 
-function modelLabel(v) { return v.model === '2.5' ? '2.5 Flash' : v.model === 'kokoro' ? 'Kokoro' : v.model === 'qwen3' ? 'Qwen3-TTS' : v.model === 'cloud' ? 'Cloud' : v.model === 'soniox' ? 'Soniox' : '3.1 Flash'; }
+function modelLabel(v) { return v.model === 'ming' ? 'Ming 0.5B' : v.model === '2.5' ? '2.5 Flash' : v.model === 'kokoro' ? 'Kokoro' : v.model === 'qwen3' ? 'Qwen3-TTS' : v.model === 'cloud' ? 'Cloud' : v.model === 'soniox' ? 'Soniox' : '3.1 Flash'; }
 const LS_RATINGS_KEY = 'vesper-shootout-ratings';
 const LS_FAVS_KEY = 'vesper-shootout-favorites';
 
@@ -279,7 +287,7 @@ function saveFavorites() {
 function buildGrid() {
   const grid = document.getElementById('grid');
   grid.innerHTML = voices.map((v, i) => {
-    const badgeClass = v.model === '2.5' ? 'model-badge m25' : v.model === 'kokoro' ? 'model-badge kokoro' : v.model === 'qwen3' ? 'model-badge qwen3' : v.model === 'cloud' ? 'model-badge cloud' : v.model === 'soniox' ? 'model-badge soniox' : 'model-badge';
+    const badgeClass = v.model === 'ming' ? 'model-badge ming' : v.model === '2.5' ? 'model-badge m25' : v.model === 'kokoro' ? 'model-badge kokoro' : v.model === 'qwen3' ? 'model-badge qwen3' : v.model === 'cloud' ? 'model-badge cloud' : v.model === 'soniox' ? 'model-badge soniox' : 'model-badge';
     const badgeText = modelLabel(v);
     const isFav = favorites.has(i);
     const rating = ratings[i] || 0;
